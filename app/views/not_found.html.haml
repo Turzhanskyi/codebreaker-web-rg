@@ -1,0 +1,21 @@
+!!!
+%html.mdl-js{lang: "en"}
+  %head
+    = render('_head.html.haml')
+  %body
+    %section#introduction
+      .container
+        .row.fill-viewport.align-items-center.justify-content-center
+          .col-12.col-md-6
+            .row
+              .col-md-auto
+                %h1.text-white.title
+                  Codebreaker Web 2021
+            %p.lead.text-white-70
+              NOT FOUND
+            %hr.mb-4/
+            %a.btn.btn-primary.btn-lg{href: "/", role: "button"}
+              - if active_game?
+                Back to the GAME
+              - else
+                Back Home
