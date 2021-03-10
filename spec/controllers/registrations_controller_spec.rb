@@ -6,14 +6,15 @@ RSpec.describe RegistrationsController do
     Rack::Builder.parse_file('config.ru').first
   end
 
-  let(:user) { described_class.new }
+  let(:register_game) { described_class.new }
 
   describe '#create_game' do
     context 'when input is valid' do
+      before { post Router::PATH[:game] }
+
       it 'creates game instance' do
-        post '/game'
         last_request.instance_variable_set(:@params, { 'user_name' => 'User', 'level' => 'hell' })
-        expect(user.create_game(last_request).class).to eq(Codebreaker::Game)
+        expect(register_game.create_game(last_request).class).to eq(Codebreaker::Game)
       end
     end
   end

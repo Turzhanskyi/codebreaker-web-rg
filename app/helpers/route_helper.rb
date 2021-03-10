@@ -4,20 +4,17 @@ module Helpers
   module RouteHelper
     private
 
-    def back_to_active_game
-      Rack::Response.new { |response| response.redirect('/game') }.finish
+    def redirect_to(route)
+      Rack::Response.new { |response| response.redirect(route) }.finish
     end
 
-    def back_home
-      Rack::Response.new { |response| response.redirect('/') }.finish
+    def render_page(template, status = 200)
+      Rack::Response.new(render(template), status).finish
     end
 
-    def redirect_to_win_page
-      Rack::Response.new { |response| response.redirect('/win') }.finish
-    end
-
-    def redirect_to_lose_page
-      Rack::Response.new { |response| response.redirect('/lose') }.finish
+    def render(template)
+      path = File.expand_path("#{Router::VIEWS}#{template}", __FILE__)
+      Haml::Engine.new(File.read(path)).render(binding)
     end
   end
 end

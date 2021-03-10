@@ -1,16 +1,20 @@
 # frozen_string_literal: true
 
 class StatisticsController
-  include Helpers::RenderHelper
-  STORAGE_FILE = 'statistics.yml'
+  include Helpers::RouteHelper
 
-  NO_RESULTS = 'There are no winners yet! Be the first!'
+  attr_reader :decor_render
+
+  def initialize
+    @decor_render = Helpers::RenderHelper.new
+  end
 
   def show_stats
-    storage = Codebreaker::Storage.new(STORAGE_FILE)
-    winners = YAML.load_file(storage.storage_file)[:winners]
-    @stats = Codebreaker::Statistics.sorted_winners(winners)
+    if FileTest.file?(StoragesController::STORAGE_FILE)
+      winners = YAML.load_file(StoragesController::STORAGE_FILE)[:winners]
+      @stats = Codebreaker::Statistics.sorted_winners(winners)
+    end
 
-    statistics_page
+    render_page('statistics.html.haml')
   end
 end

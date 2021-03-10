@@ -1,40 +1,25 @@
 # frozen_string_literal: true
 
 module Helpers
-  module RenderHelper
-    private
-
-    def render(template)
-      path = File.expand_path("../../views/#{template}", __FILE__)
-      Haml::Engine.new(File.read(path)).render(binding)
+  class RenderHelper
+    def hints_left(game)
+      game.difficulty[:hints].to_i - game.hints_used
     end
 
-    def home_page
-      Rack::Response.new(render('menu.html.haml')).finish
+    def attempts_left(game)
+      game.difficulty[:attempts].to_i - game.attempts_used
     end
 
-    def wrong_path
-      Rack::Response.new(render('not_found.html.haml'), 404).finish
+    def hints_total_left(game)
+      game.hints_total - game.hints_used
     end
 
-    def rules_page
-      Rack::Response.new(render('rules.html.haml')).finish
+    def attempts_total_left(game)
+      game.attempts_total - game.attempts_used
     end
 
-    def statistics_page
-      Rack::Response.new(render('statistics.html.haml')).finish
-    end
-
-    def lose_page
-      Rack::Response.new(render('lose.html.haml')).finish
-    end
-
-    def win_page
-      Rack::Response.new(render('win.html.haml')).finish
-    end
-
-    def game_page
-      Rack::Response.new(render('game.html.haml')).finish
+    def difficulty_name(game)
+      game.difficulty[:name].to_s.capitalize
     end
   end
 end

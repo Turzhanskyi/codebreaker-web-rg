@@ -1,11 +1,12 @@
 # frozen_string_literal: true
 
 class RegistrationsController
+  include Validator
+
   def create_game(request)
     user = Codebreaker::User.new(request.params['user_name'])
-    raise StandardError, "Name #{request.params['user_name']} isn't valid" unless user.valid?
+    validate(user, request)
 
-    user = Codebreaker::User.new(request.params['user_name'])
     difficulty = Codebreaker::Difficulty.new(request.params['level'])
     @game = Codebreaker::Game.new(user, difficulty)
   end

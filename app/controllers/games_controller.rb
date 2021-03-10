@@ -1,10 +1,13 @@
 # frozen_string_literal: true
 
 class GamesController
-  include Helpers::RenderHelper
   include Helpers::RouteHelper
 
-  attr_reader :game_over
+  attr_reader :lose_state, :win_state, :game_over, :decor_render
+
+  def initialize
+    @decor_render = Helpers::RenderHelper.new
+  end
 
   def reset_game_state
     @lose_state = false
@@ -13,11 +16,11 @@ class GamesController
   end
 
   def won?
-    @win_state
+    win_state
   end
 
   def lost?
-    @lose_state
+    lose_state
   end
 
   def error
@@ -28,7 +31,7 @@ class GamesController
     @game = request.session[:game]
     @user_code = request.session[:user_code]
     @hints = request.session[:hints] || []
-    @game.attempts_available? ? game_page : lose_the_game(request)
+    @game.attempts_available? ? render_page('game.html.haml') : lose_the_game(request)
   end
 
   def take_hint(request)
@@ -38,30 +41,30 @@ class GamesController
 
   def check_input(request)
     guess = Codebreaker::Guess.new(request.params['code'])
-    if guess.valid?
-      return win_the_game(request) if win?(request)
+    return win_the_game(request) if win?(request) && guess.valid?
 
-      decorate(request)
-    end
-    back_to_active_game
+    decorate(request) if guess.valid?
+    redirect_to(Router::PATH[:game])
   rescue StandardError => e
-    @input_error = [].push(request.params['code'] ? e.message : 'Input your guess!')
+    errors = []
+    @input_error = errors.push(request.params['code'] ? e.message : I18n(:guess))
   end
 
   private
 
   def lose_the_game(request)
-    @game_over = request.session[:game]
-    reset_game_session(request)
     @lose_state = true
-    redirect_to_lose_page
+    finish_game(request, :lose)
   end
 
   def win_the_game(request)
-    @game_over = request.session[:game]
-    reset_game_session(request)
     @win_state = true
-    redirect_to_win_page
+    finish_game(request, :win)
+  end
+
+  def finish_game(request, path)
+    finish(request)
+    redirect_to(Router::PATH[path])
   end
 
   def validate_input(request)
@@ -79,5 +82,10 @@ class GamesController
 
   def win?(request)
     request.session[:game].win?(request.params['code'])
+  end
+
+  def finish(request)
+    @game_over = request.session[:game]
+    reset_game_session(request)
   end
 end

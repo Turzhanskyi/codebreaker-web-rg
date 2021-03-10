@@ -1,22 +1,28 @@
 # frozen_string_literal: true
 
 class Router
-  include Helpers::RenderHelper
   include Helpers::RouteHelper
+  PATH = { home: '/',
+           game: '/game',
+           rules: '/rules',
+           statistics: '/statistics',
+           take_hint: '/take_hint',
+           submit_answer: '/submit_answer',
+           lose: '/lose',
+           win: '/win' }.freeze
+
+  VIEWS = '../../views/'
 
   def initialize
-    @pathes = { '/': method(:home), '/rules': method(:rules), '/statistics': method(:statistics),
-                '/game': method(:game), '/take_hint': method(:take_hint),
-                '/submit_answer': method(:submit_answer), '/lose': method(:lose), '/win': method(:win) }
-    @registrations_controller = RegistrationsController.new
-    @games_controller = GamesController.new
-    @storages_controller = StoragesController.new
-    @statistics_controller = StatisticsController.new
+    @register_game = RegistrationsController.new
+    @current_game = GamesController.new
+    @storage = StoragesController.new
+    @statistic = StatisticsController.new
   end
 
   def call(env)
     @request = Rack::Request.new(env)
-    @pathes.key?(@request.path.to_sym) ? @pathes[@request.path.to_sym].call : wrong_path
+    PATH.value?(@request.path) ? method(PATH.key(@request.path)).call : render_page('not_found.html.haml', 404)
   end
 
   def error
@@ -26,23 +32,23 @@ class Router
   private
 
   def rules
-    return back_to_active_game if active_game?
+    return redirect_to(PATH[:game]) if active_game?
 
-    rules_page
+    render_page('rules.html.haml')
   end
 
   def home
     @request.session.clear
-    return back_to_active_game if active_game?
+    return redirect_to(PATH[:game]) if active_game?
 
-    @games_controller.reset_game_state
-    home_page
+    @current_game.reset_game_state
+    render_page('menu.html.haml')
   end
 
   def statistics
-    return back_to_active_game if active_game?
+    return redirect_to(PATH[:game]) if active_game?
 
-    @statistics_controller.show_stats
+    @statistic.show_stats
   end
 
   def active_game?
@@ -50,41 +56,41 @@ class Router
   end
 
   def game
-    return back_home if @request.get? && !active_game?
+    return redirect_to(PATH[:home]) if @request.get? && !active_game?
 
-    @request.session[:game] ||= @registrations_controller.create_game(@request)
-    @games_controller.play(@request)
+    @request.session[:game] ||= @register_game.create_game(@request)
+    @current_game.play(@request)
   rescue StandardError => e
     @registration_error = [] << e.message
-    back_home
+    redirect_to(PATH[:home])
   end
 
   def take_hint
     if active_game?
-      @games_controller.take_hint(@request)
-      back_to_active_game
+      @current_game.take_hint(@request)
+      redirect_to(PATH[:game])
     else
-      back_home
+      redirect_to(PATH[:home])
     end
   rescue StandardError => _e
-    back_to_active_game
+    redirect_to(PATH[:game])
   end
 
   def submit_answer
-    return back_home unless active_game?
+    return redirect_to(PATH[:home]) unless active_game?
 
-    @games_controller.check_input(@request)
+    @current_game.check_input(@request)
   end
 
   def win
-    return back_to_active_game if active_game?
+    return redirect_to(PATH[:game]) if active_game?
 
-    @storages_controller.win(@games_controller)
+    @storage.win(@current_game)
   end
 
   def lose
-    return back_to_active_game if active_game?
+    return redirect_to(PATH[:game]) if active_game?
 
-    @storages_controller.lose(@games_controller)
+    @storage.lose(@current_game)
   end
 end

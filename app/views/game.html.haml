@@ -9,53 +9,55 @@
           .col-12.col-md-6
             .row
               .col-md-auto
-                %h1.text-white.title
-                  Codebreaker Web 2021
+                %h1.text-white.title= I18n.t(:page_title)
             %p.lead.text-white-70
-              Hello, #{@game.user.name}.
+              = I18n.t(:hello_user, name: @game.user.name)
+              = I18n.t(:try_to_guess, code_size: Codebreaker::Constants::CODE_LENGTH, start_range: Codebreaker::Constants::CODE_RANGE.first, finish_range: Codebreaker::Constants::CODE_RANGE.last)
             %hr.mb-4/
             .row
               .col.button
                 %button.btn.btn-primary{disabled: "disabled", type: "button"}
-                  Level:
+                  = I18n.t(:level_label)
                   %span.badge.badge-light
-                    = @game.difficulty[:name].to_s.capitalize
+                    = decor_render.difficulty_name(@game)
               .col.text-center.button
                 %button.btn.btn-primary{disabled: "disabled", type: "button"}
-                  Attempts:
-                  %span.badge.badge-light= @game.difficulty[:attempts]
+                  = I18n.t(:attempts_label)
+                  %span.badge.badge-light
+                    = decor_render.attempts_left(@game)
               .col.button
                 %button.btn.btn-primary.float-right{disabled: "disabled", type: "button"}
-                  Hints:
-                  %span.badge.badge-light= @game.difficulty[:hints]
+                  = I18n.t(:hints_label)
+                  %span.badge.badge-light
+                    = decor_render.hints_left(@game)
             %hr.mb-4/
             %label.lead.label= error
-            %form{action: "/submit_answer", method: "post"}
+            %form{action: Router::PATH[:submit_answer], method: "post"}
               .form-group
-                %input.form-control.guess_input{autocomplete: "off", name: "code", placeholder: "1234", required: ""}/
+                %input.form-control.guess_input{autocomplete: "off", name: "code", placeholder:  I18n.t(:code_placeholder), required: ""}/
               .form-group.guess_markers_list
                 #guess_marker
                   - if @user_code
                     - @user_code.split('').each do |item|
-                      - if item == '+'
+                      - if item == Codebreaker::Constants::PLUS
                         %button.btn.btn-success.marks{disabled: "disabled", type: "button"}
                           = item
-                      - if item == '-'
+                      - if item == Codebreaker::Constants::MINUS
                         %button.btn.btn-primary.marks{disabled: "disabled", type: "button"}
                           = item
                     - ( 4 - @user_code.length).times do
                       %button.btn.btn-danger.marks{disabled: "disabled", type: "button"} x
               %hr.mb-4/
               %button.btn.btn-primary.btn-lg{type: "submit"}
-                Submit
+                = I18n.t(:submit_button)
               - unless @game.hints_available?
                 %button.btn.btn-warning.btn-lg.float-right{disabled: "disabled", role: "button"}
-                  Show hint!
+                  = I18n.t(:show_hint_button)
                   %span.badge.badge-light
                     = @hints.join(' ')
               - else
-                %a.btn.btn-warning.btn-lg.float-right{href: "/take_hint", role: "button"}
-                  Show hint!
+                %a.btn.btn-warning.btn-lg.float-right{href: Router::PATH[:take_hint], role: "button"}
+                  = I18n.t(:show_hint_button)
                   - if @hints.any?
                     %span.badge.badge-light
                       = @hints.join(' ')

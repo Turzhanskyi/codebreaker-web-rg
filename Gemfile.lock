@@ -1,6 +1,6 @@
 GIT
   remote: https://github.com/Turzhanskyi/codebreaker-rg
-  revision: 76578ba21f2aba278b9fc0971baee255298b0051
+  revision: 24028fa2b3162f3d45836dee7216867b30cd064e
   branch: develop
   specs:
     codebreaker (0.1.0)
@@ -82,7 +82,6 @@ GEM
     unicode-display_width (2.0.0)
 
 PLATFORMS
-  ruby
   x86_64-linux
 
 DEPENDENCIES
@@ -102,5 +101,8 @@ DEPENDENCIES
   simplecov (~> 0.21.2)
   temple (~> 0.8.2)
 
+RUBY VERSION
+   ruby 2.7.2p137
+
 BUNDLED WITH
-   2.1.4
+   2.2.11
