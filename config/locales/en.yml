@@ -16,12 +16,12 @@ en:
   name_not_valid: "Name %{user_name} isn't valid"
   no_result: 'There are no winners yet! Be the first!'
   not_found_message: 'NOT FOUND'
-  code_placeholder: '1234'
-  page_title: 'Codebreaker 2021'
+  code_placeholder: '1111'
+  page_title: 'Codebreaker Web 2021'
   rules_button: 'Rules'
   secret_code: 'The code was'
   show_hint_button: 'Show hint!'
-  start_the_game_button: 'Start the game!'
+  start_the_game_button: 'Start'
   stat_attempts_left: 'Attempts Left'
   stat_date: 'Date'
   stat_hints_left: 'Hints Left'
@@ -37,16 +37,16 @@ en:
   win_message: "Congratulations, %{name}! You won the game!"
   your_name_placeholder: 'Your name'
   rules: |
-    Codebreaker is a logic game in which a code-breaker tries to break a secret code created by a code-maker. The codemaker, which will be played by the application we’re going to write, creates a secret code of four numbers between %{code_first} and %{code_last}.
-    - The codebreaker gets some number of chances to break the code (depends on chosen difficulty). In each turn, the codebreaker makes a guess of 4 numbers. The codemaker then marks the guess with up to 4 signs - + or - or empty spaces.
-    - A + indicates an exact match: one of the numbers in the guess is the same as one of the numbers in the secret code and in the same position. For example:
-    - Secret number - 1234
-    - Input number - 6264
-    - Number of pluses - 2 (second and fourth position)
-    - A - indicates a number match: one of the numbers in the guess is the same as one of the numbers in the secret code but in a different position. For example:
-    - Secret code - 1234
-    - Input code - 6462
-    - Number of minuses - 2 (second and fourth position)
-    - An empty space indicates that there is not a current digit in a secret code.
-    - If codebreaker inputs the exact code as a secret code - codebreaker wins the game. If all attempts are spent - codebreaker loses.
-    - Codebreaker also has some number of hints(depends on chosen difficulty). If a user takes a hint - he receives back a separate digit of the secret code.
+    Codebreaker is a logic game in which a code-breaker tries to break a secret code created by a codemaker.
+    The codemaker creates a secret code of four numbers between %{code_first} and %{code_last}.
+    The codebreaker gets some number of chances to break the code (depends on chosen difficulty).
+    In each turn, the codebreaker makes a guess of 4 numbers.
+    The codemaker then marks the guess with up to 4 signs - + or - or empty spaces.
+    + indicates an exact match: one of the numbers in the guess is the same as one of the numbers in the secret code and in the same position.
+    For example: secret code - 1234, input code - 6264. Number of pluses - 2 (second and fourth position).
+    - indicates a number match: one of the numbers in the guess is the same as one of the numbers in the secret code but in a different position.
+    An empty space indicates that there is not a current digit in a secret code.
+    If codebreaker inputs the exact code as a secret code - codebreaker wins the game.
+    If all attempts are spent - codebreaker loses.
+    Codebreaker also has some number of hints (depends on chosen difficulty).
+    If a user takes a hint - he receives back a separate digit of the secret code.
