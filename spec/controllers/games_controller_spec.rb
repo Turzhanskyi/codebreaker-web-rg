@@ -94,7 +94,6 @@ RSpec.describe GamesController do
     end
 
     it 'returns game_page' do
-      # expect(current_game.play(last_request)[1]).to eq(game_page[1])
       expect(current_game.play(last_request)[1]).to eq(render_page('game.html.haml')[1])
     end
 

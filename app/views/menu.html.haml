@@ -24,8 +24,8 @@
                 %label.lead.label{for: "level"}= I18n.t(:level_input)
                 %select.custom-select{name: "level", required: ""}
                   %option{value: ""}= I18n.t(:level_message_text)
-                  - Codebreaker::Constants::LEVELS.each do |_level, params|
-                    %option{value: params[:name]}= params[:name].capitalize
+                  - Codebreaker::Constants::LEVELS.each do |level, params|
+                    %option{value: params[:name]} #{params[:name].capitalize}: #{params[:attempts]} attempts, #{params[:hints]} hints
               %hr.mb-4/
               %button.btn.btn-primary.btn-lg{type: "submit"}
                 = I18n.t(:start_the_game_button)

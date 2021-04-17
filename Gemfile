@@ -10,11 +10,11 @@ gem 'codebreaker', git: 'https://github.com/Turzhanskyi/codebreaker-rg', branch:
 gem 'faker', '~> 2.15', '>= 2.15.1'
 gem 'haml', '~> 5.1.2'
 gem 'i18n', '~> 1.8', '>= 1.8.7'
-gem 'pry', '~> 0.13.1', require: false
 gem 'rack', '~> 1.6', '>= 1.6.4'
 
 group :development do
   gem 'overcommit', '~> 0.57.0', require: false
+  gem 'pry', '~> 0.13.1', require: false
   gem 'rubocop', '~> 1.8', '>= 1.8.1', require: false
   gem 'rubocop-performance', '~> 1.9', '>= 1.9.2', require: false
   gem 'rubocop-rspec', '~> 2.1', require: false
